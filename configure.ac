@@ -242,6 +242,9 @@ esac
 AM_CONDITIONAL([BUILD_BSDCPIO], [ test "$build_bsdcpio" = yes ])
 AM_CONDITIONAL([STATIC_BSDCPIO], [ test "$static_bsdcpio" = yes ])
 
+# Build libarchive_fe if and only if the programs are built
+AM_CONDITIONAL([BUILD_LIBARCHIVE_FE], [test "$build_bsdtar" = yes -o test "$build_bsdcat" = yes -o test "$build_bsdcpio" = yes])
+
 # Set up defines needed before including any headers
 case $host in
   *mingw* | *cygwin* | *msys*  )
