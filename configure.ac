@@ -242,6 +242,10 @@ esac
 AM_CONDITIONAL([BUILD_BSDCPIO], [ test "$build_bsdcpio" = yes ])
 AM_CONDITIONAL([STATIC_BSDCPIO], [ test "$static_bsdcpio" = yes ])
 
+# Build libarchive_fe if and only if the programs are built
+
+AM_CONDITIONAL([BUILD_LIBARCHIVE_FE], [test "$build_bsdtar" = yes -o test "$build_bsdcat" = yes -o test "$build_bsdcpio" = yes])
+
 # Set up defines needed before including any headers
 case $host in
   *mingw* | *cygwin* | *msys*  )
@@ -556,6 +560,8 @@ AC_CHECK_MEMBERS([struct tm.tm_gmtoff, struct tm.__tm_gmtoff],,,
 #include <time.h>
 ])
 
+AC_CHECK_DECLS([_timezone, timezone])
+
 # Check for f_namemax in struct statfs
 AC_CHECK_MEMBERS([struct statfs.f_namemax],,,
 [
@@ -649,7 +655,9 @@ AC_CHECK_FUNCS([getpwnam_r getpwuid_r getvfsbyname gmtime_r])
 AC_CHECK_FUNCS([lchflags lchmod lchown link localtime_r lstat lutimes])
 AC_CHECK_FUNCS([mbrtowc memmove memset])
 AC_CHECK_FUNCS([mkdir mkfifo mknod mkstemp])
-AC_CHECK_FUNCS([nl_langinfo openat pipe poll posix_spawnp readlink readlinkat])
+AC_CHECK_FUNCS([nl_langinfo openat pipe poll posix_spawnp])
+AC_CHECK_FUNCS([readlink readlinkat])
+AC_CHECK_FUNCS([pthread_mutex_lock pthread_mutex_unlock])
 AC_CHECK_FUNCS([readpassphrase])
 AC_CHECK_FUNCS([select setenv setlocale sigaction statfs statvfs])
 AC_CHECK_FUNCS([strchr strdup strerror strncpy_s strrchr symlink timegm])

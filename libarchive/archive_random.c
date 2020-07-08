@@ -144,7 +144,7 @@ struct arc4_stream {
 
 #define	RANDOMDEV	"/dev/urandom"
 #define	KEYSIZE		128
-#ifdef HAVE_PTHREAD_H
+#if defined(HAVE_PTHREAD_H) && defined(HAVE_PTHREAD_MUTEX_LOCK) && defined(HAVE_PTHREAD_MUTEX_UNLOCK)
 static pthread_mutex_t	arc4random_mtx = PTHREAD_MUTEX_INITIALIZER;
 #define	_ARC4_LOCK()	pthread_mutex_lock(&arc4random_mtx);
 #define	_ARC4_UNLOCK()  pthread_mutex_unlock(&arc4random_mtx);

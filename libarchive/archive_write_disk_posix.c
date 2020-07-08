@@ -2681,8 +2681,6 @@ check_symlinks_fsobj(char *path, int *a_eno, struct archive_string *a_estr,
     !(defined(HAVE_OPENAT) && defined(HAVE_FSTATAT) && defined(HAVE_UNLINKAT))
 	/* Platform doesn't have lstat, so we can't look for symlinks. */
 	(void)path; /* UNUSED */
-	(void)error_number; /* UNUSED */
-	(void)error_string; /* UNUSED */
 	(void)flags; /* UNUSED */
 	return (ARCHIVE_OK);
 #else
@@ -2754,8 +2752,10 @@ check_symlinks_fsobj(char *path, int *a_eno, struct archive_string *a_estr,
 		/* Check that we haven't hit a symlink. */
 #if defined(HAVE_OPENAT) && defined(HAVE_FSTATAT) && defined(HAVE_UNLINKAT)
 		r = fstatat(chdir_fd, head, &st, AT_SYMLINK_NOFOLLOW);
-#else
+#elif defined(HAVE_LSTAT)
 		r = lstat(head, &st);
+#else
+		r = 1;
 #endif
 		if (r != 0) {
 			tail[0] = c;
@@ -4262,9 +4262,11 @@ fixup_appledouble(struct archive_write_disk *a, const char *pathname)
 	 */
 	archive_strncpy(&datafork, pathname, p - pathname);
 	archive_strcat(&datafork, p + 2);
+#ifdef HAVE_LSTAT
 	if (lstat(datafork.s, &st) == -1 ||
 	    (st.st_mode & AE_IFMT) != AE_IFREG)
 		goto skip_appledouble;
+#endif
 
 	/*
 	 * Check if the file is in the AppleDouble form.

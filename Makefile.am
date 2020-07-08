@@ -7,7 +7,7 @@ ACLOCAL_AMFLAGS = -I build/autoconf
 # What to build and install
 #
 lib_LTLIBRARIES=	libarchive.la
-noinst_LTLIBRARIES=	libarchive_fe.la
+noinst_LTLIBRARIES=	$(libarchive_fe_libraries)
 bin_PROGRAMS=	$(bsdtar_programs) $(bsdcpio_programs) $(bsdcat_programs)
 man_MANS= $(libarchive_man_MANS) $(bsdtar_man_MANS) $(bsdcpio_man_MANS) $(bsdcat_man_MANS)
 BUILT_SOURCES= libarchive/test/list.h tar/test/list.h cpio/test/list.h cat/test/list.h
@@ -979,6 +979,11 @@ libarchive_fe_la_SOURCES= \
 	libarchive_fe/passphrase.h
 
 libarchive_fe_la_CPPFLAGS= -I$(top_srcdir)/libarchive
+
+if BUILD_LIBARCHIVE_FE
+libarchive_fe_libraries= libarchive_fe.la
+endif
+
 #
 #
 # bsdtar source, docs, etc.

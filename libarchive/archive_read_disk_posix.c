@@ -99,8 +99,10 @@ __FBSDID("$FreeBSD$");
 #include "archive_private.h"
 #include "archive_read_disk_private.h"
 
+#if 0
 #ifndef HAVE_FCHDIR
 #error fchdir function required.
+#endif
 #endif
 #ifndef O_BINARY
 #define O_BINARY	0

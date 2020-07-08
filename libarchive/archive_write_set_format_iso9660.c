@@ -2178,7 +2178,8 @@ get_system_identitier(char *system_id, size_t size)
 	strncpy(system_id, "Windows", size-1);
 	system_id[size-1] = '\0';
 #else
-#error no way to get the system identifier on your platform.
+	strncpy(system_id, "Unknown", size-1);
+	system_id[size-1] = '\0';
 #endif
 }
 
@@ -2505,10 +2506,12 @@ get_gmoffset(struct tm *tm)
 
 #if defined(HAVE__GET_TIMEZONE)
 	_get_timezone(&offset);
-#elif defined(__CYGWIN__) || defined(__MINGW32__) || defined(__BORLANDC__)
+#elif defined(HAVE_DECL__TIMEZONE)
 	offset = _timezone;
-#else
+#elif defined(HAVE_DECL_TIMEZONE)
 	offset = timezone;
+#else
+	offset = 0;
 #endif
 	offset *= -1;
 	if (tm->tm_isdst)
