@@ -556,6 +556,9 @@ AC_CHECK_MEMBERS([struct tm.tm_gmtoff, struct tm.__tm_gmtoff],,,
 #include <time.h>
 ])
 
+# Check for _timezone or timezone
+AC_CHECK_DECLS([_timezone, timezone])
+
 # Check for f_namemax in struct statfs
 AC_CHECK_MEMBERS([struct statfs.f_namemax],,,
 [

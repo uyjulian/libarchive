@@ -2505,10 +2505,12 @@ get_gmoffset(struct tm *tm)
 
 #if defined(HAVE__GET_TIMEZONE)
 	_get_timezone(&offset);
-#elif defined(__CYGWIN__) || defined(__MINGW32__) || defined(__BORLANDC__)
+#elif defined(HAVE_DECL__TIMEZONE)
 	offset = _timezone;
+#elif defined(HAVE_DECL_TIMEZONE)
+ 	offset = timezone;
 #else
-	offset = timezone;
+ 	offset = 0;
 #endif
 	offset *= -1;
 	if (tm->tm_isdst)
